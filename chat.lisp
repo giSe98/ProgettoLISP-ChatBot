@@ -1,5 +1,3 @@
-
-
 (defun bot ()
     (write-line "Ciao, per abbandonare la chat scrivi \"q\"")
     (loop
