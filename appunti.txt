@@ -23,7 +23,7 @@ bool1 && length(input)=1 && !bool2 && operaPrecedente!=null && !bool3 -> gli ris
 
 bool1 && (length(input)>1 ||operaPrecedente==null) && !bool2 && !bool3 -> "Mi dispiace, non conosco quest'opera"
 
-!bool1 && !bool2 && !bool3 -> "Ciao sono UNA BOTTANA POLACCA e puoi chiedermi di tutte le opere di Chopin (e del suo pene)"
+!bool1 && !bool2 && !bool3 -> "Ciao, puoi chiedermi informazioni su tutte le opere di Chopin"
 
 
 operaPrecedente = (nome, data, luogo, chiave, raccolte, tema, tecnica(piuScaleSI/NO) ?, )
