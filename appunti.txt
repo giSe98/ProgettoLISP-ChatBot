@@ -1,0 +1,35 @@
+funzione 1 : legge da file csv e riporta info in hashtable 2 -> link raff
+
+funzione 2: legge elemento per elemento la stringa input e fa lookup nei due hashtables -> output: info di opera e tipo di risposta 
+( (L'opera opera.nome è scritta in opera.chiave) (nome, data, luogo, chiave, raccolte, tema, tecnica(piuScaleSI/NO) ?, ))
+
+funzione 3: costruzione risposta sulla base di opera e tipo di risposta -> printa risposta e output: (nome, data, luogo, chiave, raccolte, tema, tecnica(piuScaleSI/NO) ?, )
+
+
+
+hashtable 1 -> lookup ritorna risposta parametrizzata
+
+DOMANDA | RISPOSTA
+chiave	-> (L'opera opera.nome è scritta in opera.chiave)
+raccolta -> (L'opera opera.nome fa parte delle opera.raccolte)
+tecnica -> ?
+tema -> (L'opera opera.nome tratta di opera.tema)
+argomento -> (L'opera opera.nome tratta di opera.tema)
+parla -> (L'opera opera.nome tratta di opera.tema)
+tratta -> (L'opera opera.nome tratta di opera.tema)
+default -> (L'opera opera.nome è stata scritta a opera.luogo nel opera.data)
+
+
+hashtable 2 -> lookup ritorna le info dell'opera
+opera x -> (nome, data, luogo, chiave, raccolte, tema, tecnica(piuScaleSI/NO) ?, )
+opera y ->
+opera z ->
+default -> "mi dispiace, non conosco quest'opera"
+
+*bindings*
+opera.nome=opera[0]
+opera.data=opera[1]
+opera.luogo=opera[2]
+opera.chiave=opera[3]
+opera.raccolte=opera[4]
+opera.tema=opera[5]
