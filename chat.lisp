@@ -48,20 +48,20 @@
 
     (dolist (parola input)
 
-        (cond ((null b1) 
+        (cond ((null b1)
         ;se b1 è null, facciamo il lookup in h1
             (setq tmp1 (gethash parola h1))
-            (cond ((not (null tmp1)) (setq b1 tmp1))   ) 
+            (cond ((not (null tmp1)) (setq b1 tmp1))   )
             )
-             
+
         )
 
         (cond ((null b2)
-        ;se b2 è null, facciamo il lookup in h2  
+        ;se b2 è null, facciamo il lookup in h2
             (setq tmp2 (gethash parola h2))
-            (cond ((not (null tmp2)) (setq b2 tmp2))   ) 
+            (cond ((not (null tmp2)) (setq b2 tmp2))   )
             )
-             
+
         )
 
         (cond ((null b3)
@@ -69,11 +69,11 @@
             (setq tmp3 (gethash parola h3))
             (cond ((not (null tmp3)) (setq b3 tmp3))  )
             )
-            
+
         )
     )
     (list b1 b2 b3)
-    
+
 
 )
 
@@ -83,38 +83,49 @@
 ;dopo che serve farlo in f3
 
 (defun f3 (input l)
-
+    ;(print (list b1 b2 b3))
     ;a questo punto abbiamo b1, b2, b3
-    (cond ( b2 ) (setq operaPrecedente b2)   )
+    (cond
+      ((and b2 T) (setq operaPrecedente b2)) ;TODO vedere se è possibile eliminare il confronto
 
-    
-    (cond 
+      ;bool1 && length(input)<2 && !bool2 && operaPrecedente!=null && !bool3 -> gli rispondo con l'opera precedente
+      ;TODO non riconosce se uno scrive dove o cose del genere che abbiamo messo nella risposta di default
+      ( (and  b1 (< (length input) 2) (null b2) operaPrecedente (null b3))
+        (setq b2 operaPrecedente)
+      )
+
+      (T (setq operaPrecedente NIL))
+    )
+
+    (cond
+
         ;bool1 && bool2 -> rispondiamo con info su opera indicata
         ( (and b1 b2)
           (subst (car b2) 'opera.nome (subst (cadddr b2) 'opera.chiave (subst (cadr (cdddr b2)) 'opera.tema (subst (caddr (cdddr b2)) 'opera.raccolta b1))))
         )
 
         ;!bool2 && bool3 -> rispondiamo con info su raccolta indicata
-        ( (and (null b2) b3) 
-          
-        ) 
+        ( (and (null b2) b3)
 
-        ;!bool1 && bool2 -> (L'opera opera.nome è stata scritta a opera.luogo nel opera.data) 
-        ( (and (null b1)  b2 ) 
+        )
+
+        ;!bool1 && bool2 -> (L'opera opera.nome è stata scritta a opera.luogo nel opera.data)
+        ( (and (null b1)  b2 )
           (subst (car b2) 'opera.nome (subst (cadr b2) 'opera.data (subst (caddr b2) 'opera.luogo defaultAns)))
         )
-        
-        ;bool1 && length(input)<2 && !bool2 && operaPrecedente!=null && !bool3 -> gli rispondo con l'opera precedente
-        ( (and  b1 (< 2 (length input)) (null b2)  operaPrecedente (null b3)) 
-          (<COSTRUIRE RISPOSTA CON operaPrecedente>)
-        )
-    
+
+
         ;bool1 && (length(input)>1 ||operaPrecedente==null) && !bool2 && !bool3 -> "Mi dispiace, non conosco quest'opera"
-        ( (and (not (null b1)) (or (> 1 (length input)) (null operaPrecedente)) (null b2) (null b3) ) (<COSTRUIRE RISP MI DISPIACE NON CONOSCO QUEST'OPERA>))
-        
+        ;non si capisce l'or
+        ( (and b1 (or (> (length input) 1) (null operaPrecedente)) (null b2) (null b3) )
+          (list "Mi dispiace, non conosco quest'opera")
+          )
+
         ;!bool1 && !bool2 && !bool3 -> "Ciao, puoi chiedermi informazioni su tutte le opere di Chopin"
-        ( (and (null b1) (null b2 ) (null b3)) (COSTRUIRE RISPOSTA "Ciao, puoi chiedermi informazioni su tutte le opere di Chopin") )
-    ) 
+        ( (and (null b1) (null b2 ) (null b3))
+          (list "Ciao, puoi chiedermi informazioni su tutte le opere di Chopin")
+        )
+    )
 )
 
 (defun bot ()
@@ -123,7 +134,7 @@
         (princ ">>  ")
         (let* ((line (read-line))
             ;input è la lista che contiene le parole che compongono la stringa di input
-            (input (read-from-string (concatenate 'string "(" line ")")))) 
+            (input (read-from-string (concatenate 'string "(" line ")"))))
             (when (string-equal line "q") (return))
             ; qui chiamata f1
             (format t "~{~a~^ ~}" (f3 input (f2 input)))
@@ -134,7 +145,7 @@
             ;(format t "~{~(~a ~)~}~%"
             ;(dolist (r *rules*)
             ;   (when (match (car r) input)
-            ;     (return 
+            ;     (return
             ;     (subs (random-elt (cdr r)))))))
         )
     )
