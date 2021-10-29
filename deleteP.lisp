@@ -16,4 +16,3 @@
   )
   result
 )
-(write(deleteP "st. rin,ga?c.\" "))
