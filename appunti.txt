@@ -1,13 +1,35 @@
+(L'opera opera.nome è stata scritta a opera.luogo nel opera.data)
+opera con titolo con piu parole
+
 funzione 1 : legge da file csv e riporta info in hashtable 2 -> link raff
 
-funzione 2: legge elemento per elemento la stringa input e fa lookup nei due hashtables -> output: info di opera e tipo di risposta 
+funzione 2: legge elemento per elemento (eliminando punteggiatura e altra spazzatura) la stringa input e fa lookup nei tre hashtables -> output: info di opera e tipo di risposta 
 ( (L'opera opera.nome è scritta in opera.chiave) (nome, data, luogo, chiave, raccolte, tema, tecnica(piuScaleSI/NO) ?, ))
 
-funzione 3: costruzione risposta sulla base di opera e tipo di risposta -> printa risposta e output: (nome, data, luogo, chiave, raccolte, tema, tecnica(piuScaleSI/NO) ?, )
+funzione 3: costruzione risposta sulla base di opera e tipo di risposta -> printa risposta e output: operaPrecedente=(nome, data, luogo, chiave, raccolte, tema, tecnica(piuScaleSI/NO) ?, )
+
+ "Puoi riformulare la domanda per favore?"
 
 
+
+
+bool1 && bool2 -> rispondiamo con info su opera indicata
+
+!bool2 && bool3 -> rispondiamo con info su raccolta indicata
+
+!bool1 && bool2 -> (L'opera opera.nome è stata scritta a opera.luogo nel opera.data) 
+
+bool1 && length(input)=1 && !bool2 && operaPrecedente!=null && !bool3 -> gli rispondo con l'opera precedente
+
+bool1 && (length(input)>1 ||operaPrecedente==null) && !bool2 && !bool3 -> "Mi dispiace, non conosco quest'opera"
+
+!bool1 && !bool2 && !bool3 -> "Ciao, puoi chiedermi informazioni su tutte le opere di Chopin"
+
+
+operaPrecedente = (nome, data, luogo, chiave, raccolte, tema, tecnica(piuScaleSI/NO) ?, )
 
 hashtable 1 -> lookup ritorna risposta parametrizzata
+bool1= ESISTE ALMENO UNA PAROLA T.C. lookup in hashtable1 ha successo
 
 DOMANDA | RISPOSTA
 chiave	-> (L'opera opera.nome è scritta in opera.chiave)
@@ -17,14 +39,31 @@ tema -> (L'opera opera.nome tratta di opera.tema)
 argomento -> (L'opera opera.nome tratta di opera.tema)
 parla -> (L'opera opera.nome tratta di opera.tema)
 tratta -> (L'opera opera.nome tratta di opera.tema)
-default -> (L'opera opera.nome è stata scritta a opera.luogo nel opera.data)
-
+dove -> (L'opera opera.nome è stata scritta a opera.luogo nel opera.data)
+quando -> (L'opera opera.nome è stata scritta a opera.luogo nel opera.data)
+...
 
 hashtable 2 -> lookup ritorna le info dell'opera
-opera x -> (nome, data, luogo, chiave, raccolte, tema, tecnica(piuScaleSI/NO) ?, )
-opera y ->
-opera z ->
-default -> "mi dispiace, non conosco quest'opera"
+bool2= ESISTE ALMENO UNA PAROLA T.C. lookup in hashtable2 ha successo
+x -> ((nome, data, luogo, chiave, raccolte, tema, tecnica(piuScaleSI/NO) ?, ))
+y ->
+z ->
+bolero ->
+krakowiak ->
+
+hashtable 3 -> lookup ritorna le info delle raccolte
+bool3= ESISTE ALMENO UNA PAROLA T.C. lookup in hashtable3 ha successo
+mazurca or mazzurche -> (nome, descriz, cardinalità)
+valzer -> (nome, descriz)
+notturni -> (nome, descriz)
+preludi -> (nome, descriz)
+ballate -> (nome, descriz)
+studi -> (nome, descriz)
+scherzi -> (nome, descriz)
+improvvisi-> (nome, descriz)
+variazioni-> (nome, descriz)
+sonate-> (nome, descriz)
+rondò -> (nome, descriz)
 
 *bindings*
 opera.nome=opera[0]
