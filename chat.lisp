@@ -17,7 +17,7 @@
 (setf (gethash '2 h2) '("Opera2" "12-10-2010" "Maropati"))
 (setf (gethash '3 h2) '("Opera3" "13-10-2001" "Cosenza"))
 (setf (gethash '4 h2) '("Opera4" "14-10-2001" "Rende"))
-(setf (gethash 'racc1 h3) '(raccolta n one))
+(setf (gethash 'mazurche h3) '("Le Mazurche sono 10 opere scritte per i polacchi bastardi"))
 (setf (gethash 'racc2 h3) '(raccolta n two))
 (setf (gethash 'racc3 h3) '(raccolta n three))
 ;
@@ -86,7 +86,7 @@
     ;(print (list b1 b2 b3))
     ;a questo punto abbiamo b1, b2, b3
     (cond
-      ((and b2 T) (setq operaPrecedente b2)) ;TODO vedere se è possibile eliminare il confronto
+      (b2 (setq operaPrecedente b2)) ;TODO vedere se è possibile eliminare il confronto
 
       ;bool1 && length(input)<2 && !bool2 && operaPrecedente!=null && !bool3 -> gli rispondo con l'opera precedente
       ;TODO non riconosce se uno scrive dove o cose del genere che abbiamo messo nella risposta di default
@@ -100,14 +100,15 @@
     (cond
 
         ;bool1 && bool2 -> rispondiamo con info su opera indicata
+        ;TODO SE CAMBIA COL CSV CAMBIARE QUI
         ( (and b1 b2)
           (subst (car b2) 'opera.nome (subst (cadddr b2) 'opera.chiave (subst (cadr (cdddr b2)) 'opera.tema (subst (caddr (cdddr b2)) 'opera.raccolta b1))))
         )
 
         ;!bool2 && bool3 -> rispondiamo con info su raccolta indicata
-        ( (and (null b2) b3)
-
-        )
+      ( (and (null b2) b3)
+        b3
+       )
 
         ;!bool1 && bool2 -> (L'opera opera.nome è stata scritta a opera.luogo nel opera.data)
         ( (and (null b1)  b2 )
@@ -149,6 +150,25 @@
             ;     (subs (random-elt (cdr r)))))))
         )
     )
+)
+
+(defun deleteP (string)
+  (setq result "")
+  (
+    dotimes (i (length string))
+      (
+        cond
+          ( (or (string= (char string i) #\,) (string= (char string i) #\.) (string= (char string i) #\!) (string= (char string i) #\?) (string= (char string i) #\:) (string= (char string i) #\;))
+            (
+              cond
+                ( (and (/= i (- (length string) 1)) (string/= (char string (+ i 1)) " ")) (setq result (concatenate 'string result " ")) )
+            )
+          )
+          ((= i (- (length string) 1)) (cond ((string/= (char string i) " ") (setq result (concatenate 'string result (string (char string i)))))))
+          (t (setq result (concatenate 'string result (string (char string i)))))
+      )
+  )
+  result
 )
 
 (bot)
