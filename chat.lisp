@@ -7,8 +7,8 @@
 
 ;riempimento per prova
 ;
-;(setf (gethash 'dove h1) '("L'opera" opera.nome "e' stata scritta a" opera.luogo "nel" opera.data))
-;(setf (gethash 'quando h1) '("L'opera" opera.nome "e' stata scritta a" opera.luogo "nel" opera.data))
+(setf (gethash 'dove h1) '("L'opera" opera.nome "e' stata scritta a" opera.luogo "nel" opera.data))
+(setf (gethash 'quando h1) '("L'opera" opera.nome "e' stata scritta a" opera.luogo "nel" opera.data))
 (setf (gethash 'argomento h1) '("L'opera" opera.nome "tratta di" opera.tema))
 (setf (gethash 'tema h1) '("L'opera" opera.nome "tratta di" opera.tema))
 (setf (gethash 'chiave h1) '("L'opera" opera.nome "e' scritta in" opera.chiave))
@@ -44,9 +44,16 @@
     (setq b1 nil)
     (setq b2 nil)
     (setq b3 nil)
+    (setq bOp nil)
 
 
     (dolist (parola input)
+        (cond 
+          (
+            (and (not(numberp parola)) (or (string-equal "op" (string parola)) (string-equal "opera" (string parola))) ) 
+            (setq bOp T)
+          )
+        )
 
         (cond ((null b1)
         ;se b1 è null, facciamo il lookup in h1
@@ -72,8 +79,8 @@
 
         )
     )
-    (list b1 b2 b3)
-
+    ;(list b1 b2 b3 bOp)
+    (print bOp)
 
 )
 
@@ -82,19 +89,13 @@
 ;ve l'abbiamo iniziata noi perché l'avevamo ormai fatto, ma ci siamo resi conto
 ;dopo che serve farlo in f3
 
-(defun f3 (input l)
+(defun f3 ()
     ;(print (list b1 b2 b3))
     ;a questo punto abbiamo b1, b2, b3
-    (cond
-      (b2 (setq operaPrecedente b2)) ;TODO vedere se è possibile eliminare il confronto
 
-      ;bool1 && length(input)<2 && !bool2 && operaPrecedente!=null && !bool3 -> gli rispondo con l'opera precedente
-      ;TODO non riconosce se uno scrive dove o cose del genere che abbiamo messo nella risposta di default
-      ( (and  b1 (< (length input) 2) (null b2) operaPrecedente (null b3))
-        (setq b2 operaPrecedente)
-      )
-
-      (T (setq operaPrecedente NIL))
+    (cond 
+      ((and b1 (not (null b2)) (null b3))
+      (setq operaPrecedente b2))
     )
 
     (cond
@@ -118,7 +119,7 @@
 
         ;bool1 && (length(input)>1 ||operaPrecedente==null) && !bool2 && !bool3 -> "Mi dispiace, non conosco quest'opera"
         ;non si capisce l'or
-        ( (and b1 (or (> (length input) 1) (null operaPrecedente)) (null b2) (null b3) )
+        ( (and b1 (or bOp (null operaPrecedente)) (null b2) (null b3) )
           (list "Mi dispiace, non conosco quest'opera")
           )
 
@@ -127,6 +128,37 @@
           (list "Ciao, puoi chiedermi informazioni su tutte le opere di Chopin")
         )
     )
+
+    (cond
+      (b2 (setq operaPrecedente b2)) ;TODO vedere se è possibile eliminare il confronto
+
+      ;bool1 && length(input)<2 && !bool2 && operaPrecedente!=null && !bool3 -> gli rispondo con l'opera precedente
+      ;TODO non riconosce se uno scrive dove o cose del genere che abbiamo messo nella risposta di default
+      ( (and  b1 (null b2) operaPrecedente (null b3))
+        (setq b2 operaPrecedente) 
+      )
+
+      (T (setq operaPrecedente NIL))
+    )
+)
+
+(defun deleteP (string)
+  (setq result "")
+  (
+    dotimes (i (length string))
+      (
+        cond
+          ( (or (string= (char string i) #\') (string= (char string i) #\") (string= (char string i) #\,) (string= (char string i) #\.) (string= (char string i) #\!) (string= (char string i) #\?) (string= (char string i) #\:) (string= (char string i) #\;))
+            (
+              cond
+                ( (and (/= i (- (length string) 1)) (string/= (char string (+ i 1)) " ")) (setq result (concatenate 'string result " ")) )
+            )
+          )
+          ((= i (- (length string) 1)) (cond ((string/= (char string i) " ") (setq result (concatenate 'string result (string (char string i)))))))
+          (t (setq result (concatenate 'string result (string (char string i)))))
+      )
+  )
+  result
 )
 
 (defun bot ()
@@ -140,7 +172,8 @@
             (input (read-from-string (concatenate 'string "(" lineP ")"))))
             (when (string-equal lineP "q") (return))
             ; qui chiamata f1
-            (format t "~{~a~^ ~}" (f3 input (f2 input)))
+            (f2 input)
+            (format t "~{~a~^ ~}" (f3))
             (terpri)
 
             ; qui chiamata f3 che sostituisce la porcheria che sta sotto (commentata)
@@ -152,25 +185,6 @@
             ;     (subs (random-elt (cdr r)))))))
         )
     )
-)
-
-(defun deleteP (string)
-  (setq result "")
-  (
-    dotimes (i (length string))
-      (
-        cond
-          ( (or (string= (char string i) #\,) (string= (char string i) #\.) (string= (char string i) #\!) (string= (char string i) #\?) (string= (char string i) #\:) (string= (char string i) #\;))
-            (
-              cond
-                ( (and (/= i (- (length string) 1)) (string/= (char string (+ i 1)) " ")) (setq result (concatenate 'string result " ")) )
-            )
-          )
-          ((= i (- (length string) 1)) (cond ((string/= (char string i) " ") (setq result (concatenate 'string result (string (char string i)))))))
-          (t (setq result (concatenate 'string result (string (char string i)))))
-      )
-  )
-  result
 )
 
 (bot)

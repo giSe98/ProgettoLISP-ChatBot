@@ -11,7 +11,10 @@ funzione 3: costruzione risposta sulla base di opera e tipo di risposta -> print
  "Puoi riformulare la domanda per favore?"
 
 
-
+(cond 
+    ((and b1 (not (null b2)) (null b3)))
+    (setq operaPrecedente b2))
+)
 
 bool1 && bool2 -> rispondiamo con info su opera indicata
 
