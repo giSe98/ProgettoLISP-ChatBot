@@ -134,9 +134,11 @@
     (loop
         (princ ">>  ")
         (let* ((line (read-line))
+
+            (lineP (deleteP line))
             ;input è la lista che contiene le parole che compongono la stringa di input
-            (input (read-from-string (concatenate 'string "(" line ")"))))
-            (when (string-equal line "q") (return))
+            (input (read-from-string (concatenate 'string "(" lineP ")"))))
+            (when (string-equal lineP "q") (return))
             ; qui chiamata f1
             (format t "~{~a~^ ~}" (f3 input (f2 input)))
             (terpri)
