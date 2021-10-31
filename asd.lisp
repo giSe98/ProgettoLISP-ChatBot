@@ -2,25 +2,27 @@
 (defparameter h2 (make-hash-table))
 (defparameter h3 (make-hash-table))
 (defparameter operaPrecedente nil)
-(defparameter defaultAns '("L'opera" opera.nome "e' stata scritta a" opera.luogo "nel" opera.data) )
+(defparameter defaultAns '("L'opera" opera.id "e'" opera.nome) )
 
 ;riempimento per prova
 ;
 
-(setf (gethash 'dove h1) '("L'opera" opera.nome "e' stata scritta a" opera.luogo))
+
+;(setf (gethash 'dove h1) '("L'opera" opera.nome "e' stata scritta a" opera.luogo))
 (setf (gethash 'quando h1) '("L'opera" opera.nome "e' stata scritta nel" opera.data))
-(setf (gethash 'argomento h1) '("L'opera" opera.nome "tratta di" opera.tema))
-(setf (gethash 'tema h1) '("L'opera" opera.nome "tratta di" opera.tema))
+;(setf (gethash 'argomento h1) '("L'opera" opera.nome "tratta di" opera.tema))
+;(setf (gethash 'tema h1) '("L'opera" opera.nome "tratta di" opera.tema))
 (setf (gethash 'chiave h1) '("L'opera" opera.nome "e' scritta in" opera.chiave))
-(setf (gethash 'raccolta h1) '("L'opera" opera.nome "fa parte delle" opera.raccolta))
-(setf (gethash '1 h2) '("Opera1" "2001" "Rende" "Chiave1" "Tema1" "Raccolta1"))
+(setf (gethash 'raccolta h1) '("L'opera" opera.id "fa parte" opera.raccolta))
+(setf (gethash '1 h2) '("Opera1" "2001" "Chiave1" "Raccolta1" "id1"))
 (setf (gethash '2 h2) '("Opera2" "12-10-2010" "Maropati"))
 (setf (gethash '3 h2) '("Opera3" "13-10-2001" "Cosenza"))
 (setf (gethash '4 h2) '("Opera4" "14-10-2001" "Rende"))
-(setf (gethash 'mazurche h3) '("Le Mazurche sono 10 opere scritte per i polacchi bastardi"))
-(setf (gethash 'racc2 h3) '(raccolta n two))
-(setf (gethash 'racc3 h3) '(raccolta n three))
-(setf (gethash 'piace h3) '("Mi piace tutto il repertorio di Chopin"))
+
+;(setf (gethash 'mazurche h3) '("Le Mazurche sono 10 opere scritte per i polacchi bastardi"))
+;(setf (gethash 'racc2 h3) '(raccolta n two))
+;(setf (gethash 'racc3 h3) '(raccolta n three))
+;(setf (gethash 'piace h3) '("Mi piace tutto il repertorio di Chopin"))
 ;
 ;fine prova
 ;
@@ -38,6 +40,12 @@
            (if (listen str)
                (cons (read str) (string-to-list str))
                nil)))
+
+(defun loadCsv (csv hashmap)
+  (dolist (row csv)
+    (setf (gethash (car (string-to-list (car row))) hashmap) (cdr row))
+  )
+)
 
 (defun f2 (input)
 
@@ -107,8 +115,8 @@
 
         ;bool1 && bool2 -> rispondiamo con info su opera indicata
         ;TODO SE CAMBIA COL CSV CAMBIARE QUI
-        ( (and b1 b2)
-          (subst (car b2) 'opera.nome (subst (cadddr b2) 'opera.chiave (subst (cadr (cdddr b2)) 'opera.tema (subst (caddr (cdddr b2)) 'opera.raccolta (subst (cadr b2) 'opera.data (subst (caddr b2) 'opera.luogo b1))))))
+        ( (and b1 b2 bOp)
+          (subst (car b2) 'opera.nome (subst (caddr b2) 'opera.chiave (subst (cadddr b2) 'opera.raccolta (subst (cadr (cdddr b2)) 'opera.id (subst (cadr b2) 'opera.data b1)))))
         )
 
         ;!bool2 && bool3 -> rispondiamo con info su raccolta indicata
@@ -117,8 +125,8 @@
        )
 
         ;!bool1 && bool2 -> (L'opera opera.nome è stata scritta a opera.luogo nel opera.data)
-        ( (and (null b1)  b2 )
-          (subst (car b2) 'opera.nome (subst (cadr b2) 'opera.data (subst (caddr b2) 'opera.luogo defaultAns)))
+        ( (and (null b1)  b2 bOp)
+          (subst (car b2) 'opera.nome (subst (cadr (cdddr b2)) 'opera.id defaultAns))
         )
 
 
@@ -129,7 +137,7 @@
           )
 
         ;!bool1 && !bool2 && !bool3 -> "Ciao, puoi chiedermi informazioni su tutte le opere di Chopin"
-        ( (and (null b1) (null b2 ) (null b3))
+        ( T 
           (list "Ciao, puoi chiedermi informazioni su tutte le opere di Chopin")
         )
     )
@@ -178,5 +186,19 @@
   )
   result
 )
+
+
+;load libreria
+(load "C:/Users/mirie/quicklisp/setup.lisp")
+(ql:quickload "cl-csv" :silent t)
+
+;read csv
+(setq csvRaccolte (cdr (cl-csv:read-csv #P"./raccolte2")))
+(setq csvOpere (cdr (cl-csv:read-csv #P"./opere.csv")))
+
+;load hashmap
+(loadCsv csvRaccolte h3)
+(loadCsv csvOpere h2)
+;(write h2)
 
 (bot)
