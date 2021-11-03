@@ -105,9 +105,7 @@
 
       (T (setq operaPrecedente NIL))
     )
-    (print b2)
-    (terpri)
-    (print operaPrecedente)
+    
     (cond
 
         ;bool1 && bool2 -> rispondiamo con info su opera indicata
@@ -176,7 +174,7 @@
 
 
 ;load libreria
-(load "C:/Users/mirie/quicklisp/setup.lisp")
+(load "~/quicklisp/setup.lisp")
 (ql:quickload "cl-csv" :silent t)
 
 ;read csv
