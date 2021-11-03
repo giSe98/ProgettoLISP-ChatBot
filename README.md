@@ -14,13 +14,11 @@
 
 
 ## Prerequisiti
-#
 Affinchè il ChatBot funzioni correttamente bisogna:
 * avere installato [clisp](https://www.quicklisp.org/beta/) per eseguire;
 * avere installato [quickload](https://beta.quicklisp.org/quicklisp.lisp) per caricare correttamente i file.
 
 ## Usage
-#
 Poni delle domande utilizzando il numero o il nome dell'opera, questo perchè Chopin non amava "etichettarle" con dei titoli.
 <p align="center">
   <img src="https://i.postimg.cc/W3jMdgPw/char.jpg" />
