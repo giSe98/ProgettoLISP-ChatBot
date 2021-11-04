@@ -16,7 +16,6 @@
 (setf (gethash 'tempo h1) '("Il tempo dell'opera" opera.nome "e'" opera.movimento))
 (setf (gethash 'agogica h1) '("Il tempo dell'opera" opera.nome "e'" opera.movimento))
 (setf (gethash 'ritmo h1) '("Il tempo dell'opera" opera.nome "e'" opera.movimento))
-;(setf (gethash 'argomento h1) '("L'opera" opera.nome "tratta di" opera.tema))
 (setf (gethash 'chiave h1) '("L'opera" opera.nome "e' scritta in" opera.chiave))
 (setf (gethash 'tonalità h1) '("L'opera" opera.nome "e' scritta in" opera.chiave))
 (setf (gethash 'tonalita h1) '("L'opera" opera.nome "e' scritta in" opera.chiave))
